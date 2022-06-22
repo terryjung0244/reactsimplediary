@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 
 const DiaryEditor = () => {
 
   // const [author, setAuthor] = useState(''); //State that manages input
   // const [content, setContent] = useState(''); //State that manages textarea
+
+  const authorInput = useRef();
+  const contentInput = useRef();
 
   const [state, setState] = useState({
     author: '',
@@ -18,7 +21,16 @@ const DiaryEditor = () => {
   }
 
   const handleSubmit = () => {
-    console.log(state)
+    if(state.author.length < 1) {
+      authorInput.current.focus();
+      return; //입력방지
+    }
+
+    if(state.content.length < 3) {
+      contentInput.current.focus();
+      return;
+    }
+
     alert('Saved')
   }
 
@@ -29,13 +41,15 @@ const DiaryEditor = () => {
       </div>
       <div>
         <input
+          ref={authorInput} 
           name='author'
-          value={state.author} //현재 author의 상태는 비어있는 상태이고, 업데이트가 되지않는 State이므로 아무것도 적혀지지 않는다. 'setAuthor'로 업데이트를 해주면 Input안에 입력한 값들이 나온다. 입력한 값들이 업데이트된 states이다.  
-          onChange={onChangeHandler} //onChange에 등록되는 콜백함수는 Parameter에 event를 전달받게 되고,     
+          value={state.author}
+          onChange={onChangeHandler} 
         />
       </div>
       <div>
         <textarea
+          ref={contentInput} 
           name='content'
           value={state.content}
           onChange={onChangeHandler}
