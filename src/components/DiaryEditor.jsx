@@ -1,49 +1,53 @@
 import React, { useState, useRef } from 'react'
 
-const DiaryEditor = () => {
+const DiaryEditor = ({createDiaryData}) => {
 
-  // const [author, setAuthor] = useState(''); //State that manages input
-  // const [content, setContent] = useState(''); //State that manages textarea
+  // const [author, setAuthor] = usediaryInput(''); //diaryInput that manages input
+  // const [content, setContent] = usediaryInput(''); //diaryInput that manages textarea
 
   const authorInput = useRef();
   const contentInput = useRef();
 
-  const [state, setState] = useState({
+  const [diaryInput, setDiaryInput] = useState({
     author: '',
     content: '',
     emotion: 1
   })
 
   const onChangeHandler = (e) => {
-    console.log(e.target.name)
-    console.log(e.target.value)
-    setState({...state, [e.target.name] : [e.target.value]})
+    // console.log(e.target.name)
+    // console.log(e.target.value)
+    setDiaryInput({
+      ...diaryInput,
+      [e.target.name]: e.target.value
+    });
   }
 
   const handleSubmit = () => {
-    if(state.author.length < 1) {
+    if(diaryInput.author.length < 1) {
       authorInput.current.focus();
-      return; //입력방지
+      return; //break
     }
 
-    if(state.content.length < 3) {
+    if(diaryInput.content.length < 5) {
       contentInput.current.focus();
       return;
     }
 
-    alert('Saved')
+    createDiaryData(diaryInput);
+    // alert('Saved')
   }
 
   return (
     <div className='DiaryEditor'>
-      <div>
+      <div style={{fontWeight: 'bold'}}>
         Today's Diary
       </div>
       <div>
         <input
           ref={authorInput} 
           name='author'
-          value={state.author}
+          value={diaryInput.author}
           onChange={onChangeHandler} 
         />
       </div>
@@ -51,7 +55,7 @@ const DiaryEditor = () => {
         <textarea
           ref={contentInput} 
           name='content'
-          value={state.content}
+          value={diaryInput.content}
           onChange={onChangeHandler}
         />
       </div>
@@ -59,7 +63,7 @@ const DiaryEditor = () => {
         <span>How are you feeling today? : </span>
         <select
           name='emotion'
-          value={state.emotion}
+          value={diaryInput.emotion}
           onChange={onChangeHandler}
         >
           <option value={1}>1</option>
